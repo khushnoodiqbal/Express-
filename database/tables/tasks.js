@@ -3,36 +3,29 @@ const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../dbConnections");
 const { v4: uuid } = require("uuid");
 
-const { hash } = require("bcryptjs");
-
-class users extends Model {}
-users.init(
+class tasks extends Model {}
+tasks.init(
   {
-    userId: {
+    taskId: {
       type: DataTypes.STRING(80),
       primaryKey: true,
     },
-    name: {
+    title: {
       type: DataTypes.STRING(80),
       allowNull: false,
       // defaultValue: "abc",
     },
-    username: {
+    stage: {
       type: DataTypes.STRING(40),
       allowNull: false,
-      unique: true,
     },
-    email: {
+    date: {
       type: DataTypes.STRING(40),
       allowNull: false,
-      unique: true,
     },
-    password: {
+    priority: {
       type: DataTypes.STRING(1000),
       allowNull: false,
-    },
-    role: {
-      type: DataTypes.STRING(20),
     },
   },
   {
@@ -41,13 +34,7 @@ users.init(
     sequelize,
   }
 );
-users.beforeCreate(async (user) => {
-  user.userId = uuid();
-  user.password = await hash(user.password, 10);
+tasks.beforeCreate(async (task) => {
+    task.taskId = uuid();
 });
-users.afterCreate(async(user)=>{
-  delete user.dataValues.password;
-})
-
-
-module.exports = users;
+module.exports = tasks;

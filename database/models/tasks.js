@@ -1,8 +1,8 @@
 const { models } = require("../index");
 module.exports = {
-  createUser: async (body) => {
+  createTask: async (body) => {
     try {
-      const data = await models.users.create({ ...body });
+      const data = await models.tasks.create({ ...body });
       return {
         data: data,
       };
@@ -11,13 +11,10 @@ module.exports = {
     }
   },
 
-  getallUser: async () => {
+  getallTask: async () => {
     try {
-      const data = await models.users.findAndCountAll({
+      const data = await models.tasks.findAndCountAll({
         // attributes:["userId","name","username","email"],
-        attributes: {
-          exclude: ["password"],
-        },
         paranoid: false,
       });
       return {
@@ -28,11 +25,11 @@ module.exports = {
     }
   },
 
-  updateUser: async ({ userId, ...body }) => {
+  updateTask: async ({ taskId, ...body }) => {
     try {
-      const data = await models.users.update(
+      const data = await models.tasks.update(
         { ...body },
-        { where: { userId: userId } }
+        { where: { taskId: taskId } }
       );
       return {
         data: data,
@@ -42,17 +39,13 @@ module.exports = {
     }
   },
 
-  getUser: async ({ username, userId }) => {
+  getTask: async ({ taskId }) => {
     try {
-      const data = await models.users.findOne({
-        where: {
-          ...(username == "false"
-            ? { userId: userId }
-            : { username: username }),
-        },
+      const data = await models.tasks.findOne({
+        where: { taskId: taskId },
         // attributes:["userId","name","username","email"],
         attributes: {
-          exclude: ["password", "deletedAt"],
+          exclude: ["deletedAt"],
         },
         paranoid: false,
       });
@@ -64,10 +57,10 @@ module.exports = {
     }
   },
 
-  deleteUser: async ({ userId }) => {
+  deleteTask: async ({ taskId }) => {
     try {
-      const data = await models.users.destroy({
-        where: { userId: userId },
+      const data = await models.tasks.destroy({
+        where: { taskId: taskId },
         force: true,
       });
       return {

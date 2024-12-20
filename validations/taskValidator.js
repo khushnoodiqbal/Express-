@@ -1,30 +1,31 @@
 const joi = require("joi");
 
 const createValidation = joi.object({
-  name: joi.string().min(3).max(50).required(),
-  username: joi.string().min(4).max(30).required(),
-  email: joi.string().email().required(),
-  password: joi.string().min(8).max(18).required(),
-  role:joi.string().min(3).max(15).required(),
+  title: joi.string().min(3).max(100).required(),
+  stage: joi.string().min(2).max(30).required(),
+  date: joi.string().required(),
+  priority: joi.string().min(3).max(18).required(),
+//   assigneid:joi.string().min(3).max(15).required(),
 });
 
 const updateValidation = joi.object({
-  userId: joi.string().max(80).required(),
-  name: joi.string().min(3).max(50).required(),
-  username: joi.string().min(4).max(30).required(),
-  email: joi.string().email().required(),
+  taskId: joi.string().max(80).required(),
+  title: joi.string().max(80).required(),
+  stage: joi.string().min(2).max(50).required(),
+  priority: joi.string().min(3).max(30).required(),
+  date: joi.string().required(),
+//   assigneid: joi.string().email().required(),
 });
 
 const DeleteValidation = joi.object({
-  userId: joi.string().min(4).max(64).required(),
+  taskId: joi.string().min(4).max(64).required(),
 });
 
 const getValidation = joi.object({
-  username: joi.string().max(64).required(),
-  userId: joi.string().max(34).required(),
+  taskId: joi.string().max(80).required(),
 });
 
-const createUser = async (req, res, next) => {
+const createTask = async (req, res, next) => {
   try {
     await createValidation.validateAsync(req.body);
     next();
@@ -39,7 +40,7 @@ const createUser = async (req, res, next) => {
 };
 
 
-const getUser = async (req, res, next) => {
+const getTask = async (req, res, next) => {
   try {
     await getValidation.validateAsync(req.query);
     next();
@@ -53,7 +54,7 @@ const getUser = async (req, res, next) => {
   }
 };
 
-const updateUser = async (req, res, next) => {
+const updateTask = async (req, res, next) => {
   try {
     await updateValidation.validateAsync(req.body);
 
@@ -67,7 +68,7 @@ const updateUser = async (req, res, next) => {
     });
   }
 };
-const DeleteUser = async (req, res, next) => {
+const DeleteTask = async (req, res, next) => {
   try {
     await DeleteValidation.validateAsync(req.query);
     next();
@@ -80,4 +81,4 @@ const DeleteUser = async (req, res, next) => {
     });
   }
 };
-module.exports = { createUser, updateUser, DeleteUser, getUser };
+module.exports = { createTask, updateTask, DeleteTask, getTask };
